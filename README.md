@@ -7,11 +7,12 @@ This is a collection of templates to assist with creating targets and challenges
 So you are having a killer idea and are interested in contributing your own machine for our platform. Good for you :smiley:
 
 Here is what you need to do:
-1. Create a private github repository
-2. Copy the machine template of your choice (eg `debian-machine/`) into your repository and rename it to match the name of your target
-3. Update the `Dockerfile`, `variables.yml`, `README.md` and any other of the provided files based on your needs
-4. Build and test your image locally to ensure it works
-5. Join our discord server and notify the administrators to receive further instructions. If you are not on our Discord server, you can find an invite to join at https://app.afrihackbox.com
+1. Ensure docker is installed and configured properly on your system
+2. Create a private github repository
+3. Copy the machine template of your choice (eg `debian-machine/`) into your repository and rename it to match the name of your target
+4. Update the `Dockerfile`, `variables.yml`, `README.md` and any other of the provided files based on your needs
+5. Build and test your image locally to ensure it works
+6. Join our discord server and notify the administrators to receive further instructions. If you are not on our Discord server, you can find an invite to join at https://app.afrihackbox.com
 
 The administrators will request that you give their Github accounts access to your private repository. At which point we will review and suggest fixes or changes to your machine.
 
