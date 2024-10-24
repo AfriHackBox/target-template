@@ -1,0 +1,170 @@
+---
+hostname: example
+fqdn: example.afrihackbox.ctf
+rootable: 1 # 0 for no
+difficulty: 3 # 0-6
+container:
+  name: "{{hostname}}"
+  hostname: "{{fqdn}}"
+  build: "example" # the name of the folder this file is in
+  image: "example" # the name of the image that will be generated
+  state: "started"
+  mac_address: "{{mac|default(omit)}}"
+  purge_networks: "yes"
+  tag: "v0.1"
+  env:
+    ETSCTF_FLAG: "ETSCTF_{{ETSCTF_ENV_FLAG}}"
+  dns_servers:
+    - "10.0.0.254"
+  networks:
+    - { name: "AAnet", ipv4_address: "{{ansible_host}}" }
+  volumes: []
+
+CVE: []
+ETSCTF_ROOT_FLAG: "ROOT_FLAG"
+ETSCTF_ENV_FLAG: "ENV_FLAG"
+ETSCTF_SHADOW_FLAG: "SHADOW_FLAG"
+ETSCTF_PASSWD_FLAG: "PASSWD_FLAG"
+
+
+ETSCTF_FINDINGS:
+  - {
+      name: "Discovered target host {{hostname}}",
+      pubname: "Discovered a target host",
+      points: 100,
+      stock: -1,
+      protocol: "icmp",
+      port: 0
+    }
+  - {
+      name: "Discovered a web service on target {{{{fqdn}}}}",
+      pubname: "Discovered a target host",
+      points: 100,
+      stock: -1,
+      protocol: "tcp",
+      port: 8080
+    }
+
+ETSCTF_TREASURES:
+  - { #0
+      name: "Got the ETSCTF flag under the /root folder of {{fqdn}}",
+      pubname: "Got the ETSCTF flag under the /root folder of {{fqdn}}",
+      points: 1500,
+      category: "root",
+      player_type: offense,
+      stock: -1,
+      code: "{{ETSCTF_ROOT_FLAG}}",
+      path: "/root/ETSCTF_"
+    }
+  - { #1
+      name: "Discovered the environment variable ETSCTF flag of {{fqdn}}",
+      pubname: "Gained access to data stored in environmental variables of a server",
+      category: "env",
+      points: 900,
+      player_type: offense,
+      stock: -1,
+      code: "{{ETSCTF_ENV_FLAG}}",
+    }
+  - { #2
+      comment: "flag on /etc/shadow",
+      name: "Discovered the ETSCTF username flag under the /etc/shadow file of {{fqdn}}",
+      pubname: "Discovered the ETSCTF username flag under an authentication database file of a server",
+      category: "system",
+      points: 1300,
+      player_type: offense,
+      stock: -1,
+      location: "/etc/shadow",
+      code: "{{ETSCTF_SHADOW_FLAG}}",
+    }
+  - { #3
+      comment: "flag on /etc/passwd",
+      name: "Discovered the ETSCTF username gecos flag under the /etc/passwd file of {{fqdn}}",
+      pubname: "Discovered the ETSCTF flag on gecos details of a target",
+      category: "system",
+      points: 1300,
+      player_type: offense,
+      stock: -1,
+      location: "/etc/passwd",
+      code: "{{ETSCTF_PASSWD_FLAG}}",
+    }
+#  - { #4
+#      comment: "flag with content under /var/www/html/ETSCTF.html",
+#      name: "Discovered the ETSCTF file under the webroot of {{fqdn}}",
+#      pubname: "Discovered the hidden resource of a web server",
+#      points: 100,
+#      category: "app",
+#      player_type: offense,
+#      stock: -1,
+#      code: "",
+#      fullpath: "/var/www/html/ETSCTF.html",
+#      content: "<html><title>ETSCTF_</title><body></body>"
+#    }
+#  - { #5
+#      comment: "placeholder replace with flag under /var/www/html/index.html",
+#      name: "Discovered the ETSCTF username flag of {{hostname}}",
+#      pubname: "Discovered an authentication flag on a web server",
+#      points: 100,
+#      category: "my custom category",
+#      player_type: offense,
+#      stock: -1,
+#      code: "",
+#      replace: "ETSCTF_PLACEHOLDER_SOURCE",
+#      file: "/var/www/html/index.html",
+#    }
+
+#templates:
+#  - src: "/source.file"
+#    dest: "/out.file"
+#    owner: "0"
+#    group: "0"
+#    mode: "0644"
+
+#RAW_CONFS:
+#  "/etc/sudoers.d/example":
+#    uid: 0
+#    gid: 0
+#    mode: "0440"
+#    content: |
+#      root    ALL=(ALL:ALL) ALL
+#      %sudo   ALL=(ALL:ALL) ALL
+
+#INI_FILES:
+#  - { file: "/path/to/file.ini", section: "SECTION", option: OPTION, value: "VALUE"}
+
+# These commands are executed at build time by ansible
+BUILD_COMMANDS:
+#  exec:
+#  - { cmd: "mysql < /tmp/ETSCTF.sql" }
+#  - { cmd: "somecommand", become: "ETSCTF" }
+#  replace:
+#  - { #1
+#      pattern: "ENVFLAG_HASH",
+#      file: "/usr/local/sbin/healthcheck.sh",
+#      value: "{{envhash}}",
+#    }
+
+DETAILS:
+  - { username: "ETSCTF", password: "ETSCTF_{{ETSCTF_SHADOW_FLAG}}", gecos: "ETSCTF_{{ETSCTF_PASSWD_FLAG}}", group: "nogroup", module: 'user' }
+
+
+purpose: >
+  A short text describing the purpose of the target
+
+description: >
+  description for the target
+
+metadata:
+  scenario: >
+    sample scenario
+  instructions: >
+    sample instructions
+  solution: >
+    sample solution
+  pre_credits: >
+    pre exploitation credits
+  post_credits: >
+    post exploitation credits
+  pre_exploitation: >
+    pre exploitation specific references and details
+  post_exploitation: >
+    post exploitation specific references and details
